@@ -50,6 +50,7 @@ import {
 import { useLensIdentity } from "./hooks/use-lens-identity";
 import { useLensFrameContext } from "./hooks/use-lens-context";
 import { ProfileSelectorModal } from "./components/lens-profile-select";
+import { setupComlinkHandler } from "./comlink-handler";
 
 const FALLBACK_URL =
   process.env.NEXT_PUBLIC_DEBUGGER_DEFAULT_URL || "http://localhost:3000";
@@ -117,6 +118,8 @@ export default function DebuggerPage({
   const config = useConfig();
   const account = useAccount();
   const { openConnectModal } = useConnectModal();
+  const [fid, setFid] = useState<number | null>(null);
+  
 
   useEffect(() => {
     const selectedProtocol = localStorage.getItem(
@@ -205,6 +208,17 @@ export default function DebuggerPage({
     },
     [url, protocolConfiguration, toast]
   );
+
+  useEffect(() => {
+    setupComlinkHandler(
+      setProtocolConfiguration,
+      setFid,
+      () => refreshUrl(url),
+      router
+    );
+  }, [setProtocolConfiguration, setFid, refreshUrl, url, router]);
+
+
 
   useEffect(() => {
     if (!url) {
