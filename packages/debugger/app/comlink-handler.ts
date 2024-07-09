@@ -47,7 +47,7 @@ export function setupComlinkHandler(
 
   try {
     console.log('Setting up Comlink handler');
-    Comlink.expose(debuggerInterface);
+    Comlink.expose(debuggerInterface, Comlink.windowEndpoint(window.parent));
     console.log('Comlink handler set up successfully');
   } catch (error) {
     console.error('Failed to set up Comlink handler:', error);
